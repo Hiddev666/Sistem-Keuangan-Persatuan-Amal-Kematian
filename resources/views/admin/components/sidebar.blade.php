@@ -1,7 +1,7 @@
 <aside class="w-72 shrink-0 border-r border-gray-200 bg-white min-h-screen flex flex-col">
     <div class="fixed w-72 h-screen flex flex-col">
         <div class="p-6">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
                 <img src="{{ asset('img/logo.svg') }}" alt="Logo" class="w-9 h-9">
                 <div class="leading-tight">
                     <div class="text-sm font-semibold">Sistem Keuangan</div>
@@ -22,18 +22,21 @@
                 <span>Dashboard</span>
             </a>
 
-            <a href="{{ route('admin_anggota') }}"
-                class="{{ $linkBase }} {{ request()->routeIs(['admin_anggota', 'admin_anggota_add']) ? $linkActive : $linkInactive }} mt-1">
-                <span>Anggota</span>
+            <a href="{{ route('admin_keanggotaan') }}"
+                class="{{ $linkBase }} {{ request()->routeIs(['admin_keanggotaan', 'admin_keanggotaan_add', 'admin_anggota', 'admin_anggota_add', 'admin_anggota_edit']) ? $linkActive : $linkInactive }} mt-1">
+                <span>Keanggotaan</span>
             </a>
 
-            <a href="#" class="{{ $linkBase }} {{ $linkInactive }} mt-1">
+            <a href="{{ route('admin_kas') }}"
+                class="{{ $linkBase }} {{ request()->routeIs(['admin_kas', 'admin_kas_add', 'admin_kas_edit']) ? $linkActive : $linkInactive }} mt-1">
                 <span>Kas Bulanan</span>
             </a>
 
-            <a href="#" class="{{ $linkBase }} {{ $linkInactive }} mt-1">
+            <a href="{{ route('admin_sumbangan') }}"
+                class="{{ $linkBase }} {{ request()->routeIs(['admin_sumbangan', 'admin_sumbangan_add', 'admin_sumbangan_edit']) ? $linkActive : $linkInactive }} mt-1">
                 <span>Sumbangan</span>
             </a>
+
         </nav>
 
         <div class="mt-auto p-4">

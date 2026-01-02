@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('members', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('family_card_id');
-            $table->string('name');
-            $table->string('phone')->nullable(true);
-            $table->enum('status', ['aktif', 'nonaktif', 'meninggal']);
-            $table->date('register_date');
+        Schema::create('family_cards', function (Blueprint $table) {
+            $table->id();
+            $table->string('head_member_id');
+            $table->string('password')->nullable(true);
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('members');
+        Schema::dropIfExists('family_cards');
     }
 };

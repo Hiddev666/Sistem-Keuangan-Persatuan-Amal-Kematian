@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,13 +22,12 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $user = User::query()
-            ->where('username', $validated['username'])
-            ->first();
+        $user = User::query()->where('username', $validated['username'])->first()
+            ?? Member::query()->where('id', $validated['username'])->first();
 
-        if (! $user) {
+        if (!$user) {
             return back()
-                ->withErrors(['username' => 'Username tidak ditemukan.'])
+                ->withErrors(['username' => 'NIK/Username tidak ditemukan.'])
                 ->onlyInput('username');
         }
 
@@ -46,10 +46,21 @@ class AuthController extends Controller
                 ->onlyInput('username');
         }
 
-        Auth::login($user);
-        $request->session()->regenerate();
+        if (Auth::guard('web')->attempt([
+            'username' => $validated['username'],
+            'password' => $validated['password']
+        ])) {
+            $request->session()->regenerate();
+            return redirect()->route('admin_dashboard');
+        };
 
-        return redirect()->route('admin_dashboard');
+        if (Auth::guard('member')->attempt([
+            'id' => $validated['username'],
+            'password' => $validated['password']
+        ])) {
+            $request->session()->regenerate();
+            return redirect()->route('member_dashboard');
+        };
     }
 
     public function logout(Request $request)

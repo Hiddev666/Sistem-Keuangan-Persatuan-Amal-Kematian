@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Daftakan Anggota | Sistem Keuangan Persatuan Amal Kematian')
+@section('title', 'Anggota | Sistem Keuangan Persatuan Amal Kematian')
 
 @section('content')
     <div class="mb-6">
-        <h1 class="text-2xl font-bold">Daftarkan Anggota Baru</h1>
+        <h1 class="text-2xl font-bold">{{ isset($member) ? "Edit Anggota" : "Daftarkan Anggota Baru" }}</h1>
 
         <div class="mt-5">
             @error('nik')
@@ -12,38 +12,47 @@
                     <p class="text-sm text-red-600">{{ $message }}</p>
                 </div>
             @enderror
-            <form action="{{ route("admin_anggota_create") }}" method="post">
+            @error('error')
+                <div class="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                    <p class="text-sm text-red-600">{{ $message }}</p>
+                </div>
+            @enderror
+            <form action="{{ isset($member) ? route("admin_anggota_update") : route("admin_anggota_create") }}"
+                method="post">
                 @csrf
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label for="id" class="text-gray-600 text-sm">NIK</label>
-                        <input type="text" id="id" name="id" value="{{ old('id') }}"
-                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
+                        <input type="text" id="id" name="id" value="{{ old('id') ?? $member->id ?? "" }}"
+                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required {{ isset($member->id) ? "readonly" : "" }}>
                     </div>
                     <div>
                         <label for="no_kk" class="text-gray-600 text-sm">Nomor KK</label>
-                        <input type="text" id="no_kk" name="no_kk" value="{{ old('no_kk') }}"
+                        <input type="text" id="no_kk" name="no_kk" value="{{ old('no_kk') ?? $member->no_kk ?? "" }}"
                             class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
                     </div>
                     <div>
                         <label for="name" class="text-gray-600 text-sm">Nama</label>
-                        <input type="text" id="name" name="name" value="{{ old('name') }}"
+                        <input type="text" id="name" name="name" value="{{ old('name') ?? $member->name ?? ""}}"
                             class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
                     </div>
                     <div>
                         <label for="password" class="text-gray-600 text-sm">Password</label>
-                        <input type="text" id="password" name="password" value="{{ old('password') }}"
-                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
+                        <input type="text" id="password" name="password" value="{{ old('password')}}"
+                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md">
                     </div>
                     <div>
                         <label for="phone" class="text-gray-600 text-sm">Nomor Telepon</label>
-                        <input type="text" id="phone" name="phone" value="{{ old('phone') }}"
+                        <input type="text" id="phone" name="phone" value="{{ old('phone') ?? $member->phone ?? "" }}"
                             class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
                     </div>
                     <div>
                         <label for="status" class="text-gray-600 text-sm">Status</label>
                         <select name="status" id="status"
                             class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md bg-white">
+                            @if (isset($member["status"]))
+                                <option value="{{ $member->status }}">{{ ucfirst($member->status) }}</option>
+                            @endif
                             <option value="aktif">Aktif</option>
                             <option value="nonaktif">Nonaktif</option>
                             <option value="meninggal">Meninggal</option>
@@ -51,14 +60,15 @@
                     </div>
                     <div>
                         <label for="tanggal_daftar" class="text-gray-600 text-sm">Tanggal Daftar</label>
-                        <input type="date" id="tanggal_daftar" name="tanggal_daftar" value="{{ old('tanggal_daftar') }}"
-                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
+                        <input type="date" id="tanggal_daftar" name="tanggal_daftar" @if (old("tanggal_daftar"))
+                        value="{{ old("tanggal_daftar") }}" @elseif (isset($member)) value="{{ $member["tanggal_daftar"]->format("Y-m-d") }}"
+                            @endif class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
                     </div>
                     <div>
                         <label for="address" class="text-gray-600 text-sm">Alamat</label>
                         <textarea name="address" id="address"
-                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
-                            {{ old('address') }}</textarea>
+                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md"
+                            required>{{ old('address') ?? $member->address ?? "" }}</textarea>
                     </div>
                     <div class="flex items-center gap-2">
                         <button type="submit"
@@ -80,10 +90,13 @@
                             </svg>
                             Simpan
                         </button>
-                        <button
+                        <a href="{{ route("admin_anggota") }}">
+                            <button
+                            type="button"
                             class="px-5 py-2 flex items-center gap-1 bg-gray-200 border border-gray-300 text-sm font-semibold rounded-md transition-all duration-200 ease-in-out hover:bg-gray-300">
                             Batal
                         </button>
+                    </a>
                     </div>
                 </div>
             </form>

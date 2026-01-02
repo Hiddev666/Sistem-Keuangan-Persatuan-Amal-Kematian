@@ -3,9 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Member extends Model
+class Member extends Authenticatable
 {
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
     protected $table = 'members';
 
     /**
@@ -18,20 +25,14 @@ class Member extends Model
     protected $fillable = [
         'id',
         'name',
-        'no_kk',
-        'password',
-        'address',
+        'family_card_id',
         'phone',
         'status',
-        'tanggal_daftar',
-    ];
-
-    protected $hidden = [
-        'password',
+        'register_date',
     ];
 
     protected $casts = [
-        'tanggal_daftar' => 'date',
+        'register_date' => 'date',
     ];
 
     public function contributions()
@@ -47,5 +48,10 @@ class Member extends Model
     public function deathEvents()
     {
         return $this->hasMany(DeathEvent::class, 'member_id', 'id');
+    }
+
+    public function family_card()
+    {
+        return $this->belongsTo(FamilyCard::class, 'family_card_id', 'id');
     }
 }

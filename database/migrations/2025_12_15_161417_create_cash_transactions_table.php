@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cash_transactions', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->increments('id')->primary();
             $table->string('reference_type');
             $table->unsignedBigInteger('reference_id');
             $table->date('transaction_date');
