@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('contributions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('member_id');
-            $table->string('period');
+            $table->string(column: 'family_card_id');
+            $table->unsignedBigInteger('death_event_id')->nullable();
             $table->decimal('amount', 12, 2);
             $table->enum('status', ['pending', 'paid', 'failed', 'expired']);
-            $table->unsignedBigInteger('payment_id')->nullable();
+            $table->integer('payment_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('member_id')->references('id')->on('members');
+            $table->foreign('family_card_id')->references('id')->on('family_cards');
             $table->foreign('payment_id')->references('id')->on('payments')->nullOnDelete();
+            $table->foreign('death_event_id')->references('id')->on('death_events')->nullOnDelete();
         });
     }
 

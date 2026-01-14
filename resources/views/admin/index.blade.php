@@ -8,7 +8,7 @@
             Halo,<br>
             <span class="font-semibold">{{ auth()->user()->name ?? 'User' }}!</span>
         </h1>
-        <p class="text-gray-500 text-sm">Selamat Datang Di Dashboard Admin</p>
+        <p class="text-gray-500 text-sm">Selamat Datang Di Dashboard {{ ucfirst(auth()->user()->role) }}</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -35,29 +35,21 @@
             </div>
         @endforeach
     </div>
-    <div class="flex items-start gap-4 mt-4">
+    <div class="flex gap-4 mt-4">
         <div class="w-2/3 bg-white p-3 border border-gray-300 rounded-md transition-all duration-300 ease-in-out hover:shadow-lg shadow-gray-100">
             <canvas id="chart"></canvas>
         </div>
-        <div class="flex flex-col w-1/3 gap-2">
-            <div
-                class="w-full bg-gray-100 p-3 border border-gray-300 rounded-md text-sm flex items-center justify-between">
-                <div class="flex items-center gap-1">
-                    <div class="w-3 h-3 rounded-full bg-green-800">
+        <div class="flex flex-col justify-between w-1/3 gap-2 bg-white p-3 border border-gray-300 rounded-md transition-all duration-300 ease-in-out hover:shadow-lg shadow-gray-100">
+            <p class="font-semibold text-base">Aktifitas Terkini</p>
+            @foreach ($latest_payments as $latest_payment)
+                <div class="p-2 border border-gray-200 rounded flex items-center gap-2">
+                    <div class="w-3 h-3 {{ $latest_payment->type == "income" ? "bg-green-800" : "bg-red-800" }} rounded-full"></div>
+                    <div>
+                        <p class="text-sm">{{ $latest_payment->type == "income" ? "Uang Masuk" : "Uang Keluar" }} - {{ formatTanggalIndonesia($latest_payment->created_at)}}</p>
+                        <p class="text-sm">{{ rupiah($latest_payment->amount) }} - {{ $latest_payment->description }}</p>
                     </div>
-                    <p>Telah Dibayar</p>
                 </div>
-                <p class="font-semibold text-lg">{{ $kas_summary->paid_members }}</p>
-            </div>
-            <div
-                class="w-full bg-gray-100 p-3 border border-gray-300 rounded-md text-sm flex items-center justify-between">
-                <div class="flex items-center gap-1">
-                    <div class="w-3 h-3 rounded-full bg-orange-500">
-                    </div>
-                    <p>Belum Dibayar</p>
-                </div>
-                <p class="font-semibold text-lg">{{ $kas_summary->pending_members }}</p>
-            </div>
+            @endforeach
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -65,7 +57,7 @@
         const chartData = @json($data);
     </script>
     <script>
-        const labels = chartData.map(item => 'Bulan ' + item.bulan);
+        const labels = chartData.map(item => item.hari);
         const income = chartData.map(item => item.income);
         const expense = chartData.map(item => item.expense);
 

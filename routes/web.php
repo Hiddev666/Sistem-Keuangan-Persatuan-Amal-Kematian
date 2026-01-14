@@ -3,16 +3,18 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Auth
 Route::get("sign-in", [AuthController::class, 'signIn'])->name("sign-in");
 Route::post("login", [AuthController::class, 'login'])->name("login");
 Route::post("logout", [AuthController::class, 'logout'])->middleware('auth')->name("logout");
+
 
 // Admin
 Route::middleware(['auth:web'])->group(function () {
@@ -24,8 +26,9 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post("admin/keanggotaan/create", [AdminController::class, 'createKeanggotaan'])->name("admin_keanggotaan_create");
     Route::get("admin/keanggotaan/edit/{id}", [AdminController::class, 'editKeanggotaan'])->name("admin_keanggotaan_edit");
     Route::post("admin/keanggotaan/update", [AdminController::class, 'updateKeanggotaan'])->name("admin_keanggotaan_update");
-    Route::get("admin/anggota/search", [AdminController::class, 'search'])->name("admin_anggota_search");
-    Route::get("admin/anggota/delete/{id}", [AdminController::class, 'deleteAnggota'])->name("admin_anggota_delete");
+    Route::post("admin/keanggotaan/anggota/update", [AdminController::class, 'updateKeanggotaanAnggota'])->name("admin_keanggotaan_anggota_update");
+    Route::get("admin/keanggotaan/delete/{id}", [AdminController::class, 'deleteKeanggotaan'])->name("admin_keanggotaan_delete");
+    Route::get("admin/keanggotaan/search", [AdminController::class, 'searchKeanggotaan'])->name("admin_keanggotaan_search");
 
     // Anggota
     Route::get("admin/anggota", [AdminController::class, 'anggota'])->name("admin_anggota");
@@ -45,6 +48,20 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post("admin/kas/update", [AdminController::class, 'updateKas'])->name("admin_kas_update");
     Route::get("admin/kas/delete/{id}", [AdminController::class, 'deleteKas'])->name("admin_kas_delete");
 
+    // Kejadian Duka
+    Route::get("admin/duka", [AdminController::class, 'duka'])->name("admin_duka");
+    Route::get("admin/duka/detail/{id}", [AdminController::class, 'detailDuka'])->name("admin_duka_detail");
+    Route::get("admin/duka/detail/confirm/{id}", [AdminController::class, 'confirmDuka'])->name("admin_duka_confirm");
+    Route::get("admin/duka/detail/contrib/edit/{id}", [AdminController::class, 'editDukaContrib'])->name("admin_duka_contrib_edit");
+    Route::get("admin/duka/detail/contrib/delete/{id}", [AdminController::class, 'deleteDukaContrib'])->name("admin_duka_contrib_delete");
+    Route::post("admin/duka/detail/contrib/update", [AdminController::class, 'updateDukaContrib'])->name("admin_duka_contrib_update");
+    Route::get("admin/duka/search", [AdminController::class, 'searchDuka'])->name("admin_duka_search");
+    Route::get("admin/duka/add", [AdminController::class, 'addDuka'])->name("admin_duka_add");
+    Route::post("admin/duka/create", [AdminController::class, 'createDuka'])->name("admin_duka_create");
+    Route::get("admin/duka/edit/{id}", [AdminController::class, 'editDuka'])->name("admin_duka_edit");
+    Route::post("admin/duka/update", [AdminController::class, 'updateDuka'])->name("admin_duka_update");
+    Route::get("admin/duka/delete/{id}", [AdminController::class, 'deleteDuka'])->name("admin_duka_delete");
+
     // Sumbangan
     Route::get("admin/sumbangan", [AdminController::class, 'sumbangan'])->name("admin_sumbangan");
     Route::get("admin/sumbangan/search", [AdminController::class, 'searchSumbangan'])->name("admin_sumbangan_search");
@@ -57,4 +74,8 @@ Route::middleware(['auth:web'])->group(function () {
 
 Route::middleware(['auth:member'])->group(function () {
     Route::get("member/dashboard", [MemberController::class, 'index'])->name("member_dashboard");
+    Route::get("member/kas", [MemberController::class, 'kas'])->name("member_kas");
+    Route::get("member/kas/pay/{id}", [PaymentController::class, 'payContribution'])->name("member_kas_pay");
+    Route::get("member/donasi", [MemberController::class, 'donasi'])->name("member_donasi");
+    Route::post("member/donasi/pay", [PaymentController::class, 'payDonation'])->name("member_donasi_pay");
 });

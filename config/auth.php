@@ -70,7 +70,7 @@ return [
         ],
         'members' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\Member::class),
+            'model' => env('AUTH_MODEL', App\Models\FamilyCard::class),
         ],
 
         // 'users' => [

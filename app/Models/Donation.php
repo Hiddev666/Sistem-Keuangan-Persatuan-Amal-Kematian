@@ -26,7 +26,12 @@ class Donation extends Model
 
     public function member()
     {
-        return $this->belongsTo(Member::class, 'member_id', 'id');
+        return $this->belongsTo(FamilyCard::class, 'member_id', 'id');
+    }
+
+    public function family_card()
+    {
+        return $this->belongsTo(FamilyCard::class, 'member_id', 'id');
     }
 
     public function payment()

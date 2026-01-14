@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FamilyCard;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::query()->where('username', $validated['username'])->first()
-            ?? Member::query()->where('id', $validated['username'])->first();
+            ?? FamilyCard::query()->where('id', $validated['username'])->first();
 
         if (!$user) {
             return back()
@@ -65,7 +66,8 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard("web")->logout();
+        Auth::guard("member")->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

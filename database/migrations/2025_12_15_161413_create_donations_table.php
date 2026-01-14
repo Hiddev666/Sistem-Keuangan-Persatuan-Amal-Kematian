@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('member_id')->nullable();
             $table->decimal('amount', 12, 2);
             $table->enum('status', ['pending', 'paid', 'failed']);
-            $table->unsignedBigInteger('payment_id')->nullable();
+            $table->integer('payment_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('member_id')->references('id')->on('members');

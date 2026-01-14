@@ -3,9 +3,9 @@
 @section('title', 'Login | Sistem Keuangan Persatuan Amal Kematian')
 
 @section('content')
-    <div class="w-full h-screen flex justify-between items-center">
-        <div class="w-2/5 h-full bg-white flex items-center justify-center">
-            <div class="w-2/3">
+    <div class="w-full h-svh flex justify-between items-center">
+        <div class="px-9 md:px-0 w-full md:w-2/5 h-full bg-white flex items-center justify-center">
+            <div class="w-full md:w-2/3">
                 <div class="flex items-center gap-2 mb-9">
                     <img src="{{ asset('img/logo.svg') }}" alt="Logo" class="w-9 h-9">
                     <div class="leading-tight">
@@ -60,7 +60,7 @@
                 <p class="text-center mt-4 text-gray-600 text-sm">Sistem Keuangan PAK ©2025</p>
             </div>
         </div>
-        <div class="w-3/5 h-screen bg-gradient-to-t from-green-800 to-green-500 flex justify-center items-center">
+        <div class="w-3/5 h-screen bg-gradient-to-t from-green-800 to-green-500 hidden md:flex justify-center items-center">
             <div class="flex items-center gap-5 opacity-75">
                 <img src="{{ asset("img/logo-icon.svg") }}" alt="Logo">
                 <div class="flex flex-col">

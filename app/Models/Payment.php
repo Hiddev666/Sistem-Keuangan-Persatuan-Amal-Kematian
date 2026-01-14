@@ -8,7 +8,7 @@ class Payment extends Model
 {
     protected $table = 'payments';
 
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $keyType = 'int';
 

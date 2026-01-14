@@ -3,9 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FamilyCard extends Model
+class FamilyCard extends Authenticatable
 {
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
     protected $table = 'family_cards';
 
     /**

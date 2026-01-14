@@ -32,81 +32,48 @@
             </div>
         </div>
 
-        <h1 class="text-2xl font-bold">Kas Bulanan</h1>
+        <h1 class="text-2xl font-bold">Detail Berita Duka</h1>
 
         <div class="mt-5 flex flex-col gap-5">
+            <div class="text-sm rounded flex justify-between">
+                <div class="flex gap-7">
+                    <div>
+                        <p class="text-xs text-gray-500">Nama</p>
+                        <p class="font-semibold">{{ $contributions[0]->death_event->member->name  }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">Tanggal Duka</p>
+                        <p class="font-semibold">{{ formatTanggalIndonesia($contributions[0]->death_event->date_of_death)  }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">Alamat Rumah Duka</p>
+                        <p class="font-semibold">{{ $contributions[0]->death_event->address  }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">Nominal Donasi</p>
+                        <p class="font-semibold">{{ rupiah($contributions[0]->death_event->contribution_amount)  }}</p>
+                    </div>
+                </div>
+                @if (auth()->user()->role == "admin" || auth()->user()->role == "ketua")
+                <a href="{{ route("admin_duka_confirm", $contributions[0]->death_event->id) }}">
+                    <button
+                        class="px-3 py-2 flex items-center gap-1 text-sm font-semibold rounded-md text-white transition-all duration-200 ease-in-out {{ $contributions[0]->death_event->benefit->status == "planed" ? "bg-green-800 hover:bg-green-700 " : "bg-gray-400 hover:bg-gray-400 cursor-not-allowed" }}" {{ $contributions[0]->death_event->benefit->status == "planed" ? "" : "disabled" }}>
+                        {{ $contributions[0]->death_event->benefit->status == "planed" ? "Berikan Santunan" : "Santunan Telah Diberikan" }}</button>
+                </a>
+                @endif
+            </div>
             @if (session('success'))
                 <div class="mb-4 rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-700" id="success-flash"
                     onshow="flash()">
                     <p class="text-sm text-green-600">{{ session("success") }}</p>
                 </div>
             @endif
-            <div class="w-full flex justify-between items-center">
-                <a href="{{ route("admin_kas_add") }}">
-                    <button
-                        class="px-3 py-2 flex items-center gap-1 bg-green-800 text-sm font-semibold rounded-md text-white transition-all duration-200 ease-in-out hover:bg-green-700">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="w-5 h-5">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <g id="Complete">
-                                    <g data-name="add" id="add-2">
-                                        <g>
-                                            <line fill="none" stroke="#ffffff" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2" x1="12" x2="12" y1="19" y2="5">
-                                            </line>
-                                            <line fill="none" stroke="#ffffff" stroke-linecap="round"
-                                                stroke-linejoin="round" stroke-width="2" x1="5" x2="19" y1="12" y2="12">
-                                            </line>
-                                        </g>
-                                    </g>
-                                </g>
-                            </g>
-                        </svg>
-                        Generate Kas</button>
-                </a>
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2">
-                        <input type="text" id="search" name="search"
-                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md">
-                        <button
-                            class="bg-green-800 rounded-md p-3 flex justify-center items-center transition-all duration-200 ease-in-out hover:bg-green-700">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
-                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                <g id="SVGRepo_iconCarrier">
-                                    <path
-                                        d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z"
-                                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    </path>
-                                </g>
-                            </svg>
-                        </button>
-                    </div>
-                    <form action="{{ route("admin_kas") }}" method="get">
-                        <select onchange="this.form.submit()" name="period"
-                            class="flex items-center gap-2 text-sm border border-gray-300 py-2 px-3 rounded-md transition-all duration-200 ease-in-out hover:bg-gray-100">
-                            @for ($i = 0; $i < 12; $i++)
-                                @php
-                                    $date = now()->subMonths($i);
-                                    $value = $date->format('Y-m'); // 2025-01
-                                @endphp
-
-                                <option value="{{ $value }}" {{ request('period') == $value ? 'selected' : '' }} {{ request('period') == $value ? 'selected' : '' }}>
-                                    {{ $date->locale('id')->translatedFormat('F Y') }}
-                                </option>
-                            @endfor
-                        </select>
-                    </form>
-                </div>
-            </div>
             <table class="text-sm w-full">
                 <thead class="bg-gray-100 border border-gray-300">
                     <th class="font-normal p-3 text-left">NIK</th>
                     <th class="font-normal p-3 text-left">Nama</th>
                     <th class="font-normal p-3 text-left">Nominal</th>
                     <th class="font-normal p-3 text-center">Status Pembayaran</th>
-                    <th class="font-normal p-3 text-center">Periode</th>
                     <th class="font-normal p-3 text-right">Action</th>
                 </thead>
                 <tbody id="result">
@@ -132,10 +99,11 @@
                                             </p>
                                         </div>
                                     </td>
-                                    <td class="font-normal p-2 text-center font-semibold">{{ $contribution->period }}</td>
                                     <td class="font-normal p-2 text-right font-medium">
+                                        @if ($contributions[0]->death_event->benefit->status != "disbursed" && auth()->user()->role != "ketua")
                                         <div class="flex items-center justify-end gap-1">
-                                            <a href="{{ route("admin_kas_edit", $contribution["id"]) }}">
+                                            @if ($contribution->status != "paid")
+                                            <a href="{{ route("admin_duka_contrib_edit", $contribution["id"]) }}">
                                                 <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200">
                                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                                                         class="w-4 h-4">
@@ -151,7 +119,7 @@
                                                 </button>
                                             </a>
                                             <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200"
-                                                onclick="showDeletePopup('{{ $contribution['id'] }}', this, 'kas/delete')">
+                                                onclick="showDeletePopup('{{ $contribution['id'] }}', this, 'contrib/delete')">
                                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -163,7 +131,9 @@
                                                     </g>
                                                 </svg>
                                             </button>
+                                            @endif
                                         </div>
+                                        @endif
                                     </td>
                                 </tr>
                     @endforeach

@@ -38,6 +38,11 @@
                             </div>
                         </div>
                         <div>
+                            <label for="amount" class="text-gray-600 text-sm">Nominal</label>
+                            <input type="number" id="amount" name="amount" value="{{ $donation->amount ?? old('amount')}}"
+                                class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
+                        </div>
+                        <div>
                             <label for="status" class="text-gray-600 text-sm">Status</label>
                             <select name="status" id="status"
                                 class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md bg-white">
@@ -48,6 +53,7 @@
                                 <option value="paid">Paid</option>
                             </select>
                         </div>
+                        <div></div>
                         <div class="flex items-center gap-2">
                             <button type="submit"
                                 class="px-8 py-2 flex items-center gap-1 bg-green-800 text-sm font-semibold rounded-md text-white transition-all duration-200 ease-in-out hover:bg-green-700">
@@ -218,7 +224,7 @@
             timeout = setTimeout(() => {
                 const keyword = this.value;
 
-                fetch(`{{ route('admin_anggota_search') }}?q=${encodeURIComponent(keyword)}`)
+                fetch(`{{ route('admin_keanggotaan_search') }}?q=${encodeURIComponent(keyword)}`)
                     .then(response => response.json())
                     .then(data => {
                         let html = '';
@@ -262,10 +268,10 @@
                             data.forEach(member => {
                                 html += `
                                                         <div class="border border-gray-300 bg-gray-100 p-2 flex items-center gap-5 justify-between rounded">
-                                                            <p>${member["id"]} - ${member["name"]}</p>
+                                                            <p>${member["id"]} - ${member["head"]["name"]}</p>
                                                                 <button
                                                                 type='button'
-                                                                    onclick="test('${member["id"]}', '${member["name"]}')"
+                                                                    onclick="test('${member["id"]}', '${member["head"]["name"]}')"
                                                                     class="p-2 flex items-center gap-1 bg-green-800 text-sm font-semibold rounded-md text-white transition-all duration-200 ease-in-out hover:bg-green-700">
                                                                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"
                                                                         class="w-4 h-4">

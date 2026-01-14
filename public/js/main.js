@@ -24,6 +24,7 @@ const deleteCancel = document.getElementById("delete-cancel");
 const inputAnggotaKas = document.getElementById("input-anggota-kas");
 
 function showDeletePopup(id, el, path) {
+    console.log(path)
     deletePopup.classList.remove("hidden")
     btnDelete.addEventListener("click", () => {
         let url = `${path}/${id}`

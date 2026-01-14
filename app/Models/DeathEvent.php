@@ -12,21 +12,28 @@ class DeathEvent extends Model
 
     protected $keyType = 'int';
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
-        'id',
         'member_id',
         'date_of_death',
-        'heir_name',
-        'heir_address',
+        'address',
+        'contribution_amount',
         'created_at',
+        'updated_at',
     ];
 
     protected $casts = [
         'date_of_death' => 'date',
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
+
+    public function contributions()
+    {
+        return $this->hasMany(Contribution::class);
+    }
+
 
     public function member()
     {

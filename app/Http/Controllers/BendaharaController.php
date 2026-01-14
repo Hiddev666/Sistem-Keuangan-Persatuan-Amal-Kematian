@@ -11,19 +11,16 @@ use App\Models\FamilyCard;
 use App\Models\Member;
 use App\Models\User;
 use App\Services\CashTransactionService;
-use App\Services\FonnteService;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
-class AdminController extends Controller
+class BendaharaController extends Controller
 {
     public function index()
     {
-        $latestPayment = CashTransaction::limit(4)->orderBy("created_at", "DESC")->get();
-
         $summary = CashTransaction::selectRaw("
             COALESCE(SUM(CASE WHEN type = 'income' THEN amount END), 0) AS total_income,
             COALESCE(SUM(CASE WHEN type = 'expense' THEN amount END), 0) AS total_expense,
@@ -37,20 +34,18 @@ class AdminController extends Controller
 
         $data = DB::table('cash_transactions')
             ->select(
-                DB::raw('DAY(created_at) as hari'), // Kelompokkan per tanggal
+                DB::raw('MONTH(created_at) as bulan'),
                 DB::raw("SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income"),
                 DB::raw("SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense")
             )
-            ->whereYear("created_at", "2026")
-            ->whereMonth("created_at", "1") // Fokus di bulan Januari aja, cuy
-            ->groupBy('hari')
-            ->orderBy('hari')
+            ->whereYear("created_at", "=", "2025")
+            ->groupBy('bulan')
+            ->orderBy('bulan')
             ->get();
         return view('admin/index', [
             'summary' => $summary,
             'kas_summary' => $kasSummary,
-            'data' => $data,
-            'latest_payments' => $latestPayment
+            'data' => $data
         ]);
     }
 
@@ -570,7 +565,7 @@ class AdminController extends Controller
 
             $death_event_id = $death_event::where("member_id", "=", $member)->first();
 
-            $family_cards = FamilyCard::with("head")->get();
+            $family_cards = FamilyCard::all();
 
             foreach ($family_cards as $family_card) {
                 $contribution = Contribution::create([
@@ -587,7 +582,6 @@ class AdminController extends Controller
                 "amount" => 0,
                 "status" => "planed"
             ]);
-
 
             session()->flash('success', 'Berhasil menambahkan berita duka');
 
@@ -690,7 +684,7 @@ class AdminController extends Controller
     {
         $date = now();
         $value = $date->format('Y-m');
-        $donations = Donation::with('family_card.head')
+        $donations = Donation::with('member')
             ->orderBy('created_at', 'desc')
             ->get();
 

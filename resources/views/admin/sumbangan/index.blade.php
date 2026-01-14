@@ -112,7 +112,7 @@
                     @foreach ($donations as $donation)
                                 <tr class="border-b border-gray-200 transition-all ease-in-out">
                                     <td class="font-normal p-2 text-left font-semibold">
-                                        {{ $donation->member->name ?? $donation->donor_name }}
+                                        {{ $donation->family_card->head->name ?? $donation->donor_name }}
                                     </td>
                                     <td class="font-normal p-2 text-left">
                                         {{ $donation->donor_name ? "Non Anggota" : "Anggota"}}

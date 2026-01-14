@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('death_events', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->id();
             $table->string('member_id');
             $table->date('date_of_death');
-            $table->string('heir_name');
-            $table->text('heir_address');
-            $table->timestamp('created_at')->useCurrent();
+            $table->text('address');
+            $table->decimal('contribution_amount', 12, 2);
+            $table->timestamps();
 
             $table->foreign('member_id')->references('id')->on('members');
         });

@@ -9,8 +9,8 @@ class Contribution extends Model
     protected $table = 'contributions';
 
     protected $fillable = [
-        'member_id',
-        'period',
+        'family_card_id',
+        'death_event_id',
         'amount',
         'status',
         'payment_id',
@@ -20,9 +20,14 @@ class Contribution extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function member()
+    public function family_card()
     {
-        return $this->belongsTo(Member::class, 'member_id', 'id');
+        return $this->belongsTo(FamilyCard::class, 'family_card_id', 'id');
+    }
+
+    public function death_event()
+    {
+        return $this->belongsTo(DeathEvent::class, 'death_event_id', 'id');
     }
 
     public function payment()

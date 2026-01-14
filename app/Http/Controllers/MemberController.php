@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CashTransaction;
+use App\Models\Contribution;
+use App\Models\Donation;
 use App\Models\Member;
 use Illuminate\Http\Request;
 
@@ -12,7 +15,31 @@ class MemberController extends Controller
      */
     public function index()
     {
-        return view('member/index');
+        $summary = CashTransaction::selectRaw("
+        COALESCE(SUM(CASE WHEN type = 'income' THEN amount END), 0) AS total_income,
+        COALESCE(SUM(CASE WHEN type = 'expense' THEN amount END), 0) AS total_expense,
+        COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END), 0) AS balance
+        ")->first();
+        $contributions = Contribution::where("family_card_id", "=", auth()->user()->id)->get();
+        return view('member/index', [
+            "contributions" => $contributions,
+            'summary' => $summary,
+        ]);
+    }
+
+    public function kas()
+    {
+        $donations = Donation::where("member_id", "=", auth()->user()->id)->get();
+        $contributions = Contribution::with(["death_event.member"])->where("family_card_id", "=", auth()->user()->id)->get();
+        return view('member/kas/index', [
+            "contributions" => $contributions,
+            "donations" => $donations,
+        ]);
+    }
+
+    public function donasi()
+    {
+        return view('member/kas/donation');
     }
 
     /**

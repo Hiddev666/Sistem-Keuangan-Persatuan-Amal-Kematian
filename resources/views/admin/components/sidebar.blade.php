@@ -27,9 +27,9 @@
                 <span>Keanggotaan</span>
             </a>
 
-            <a href="{{ route('admin_kas') }}"
-                class="{{ $linkBase }} {{ request()->routeIs(['admin_kas', 'admin_kas_add', 'admin_kas_edit']) ? $linkActive : $linkInactive }} mt-1">
-                <span>Kas Bulanan</span>
+            <a href="{{ route('admin_duka') }}"
+                class="{{ $linkBase }} {{ request()->routeIs(['admin_duka', 'admin_duka_add', 'admin_duka_edit', 'admin_duka_detail', 'admin_duka_contrib_edit']) ? $linkActive : $linkInactive }} mt-1">
+                <span>Berita Duka</span>
             </a>
 
             <a href="{{ route('admin_sumbangan') }}"

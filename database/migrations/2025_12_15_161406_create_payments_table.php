@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->integer('id', true)->primary();
             $table->string('order_id');
             $table->string('payment_type');
             $table->decimal('gross_amount', 12, 2);

@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{ isset($contribution) ? "Edit" : "Generate" }} Kas</h1>
+        <h1 class="text-2xl font-bold">{{ isset($contribution) ? "Edit" : "Tambah" }} Berita Duka</h1>
 
         <div class="mt-5">
             @error('nik')
@@ -101,30 +101,7 @@
                     @csrf
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label for="period" class="text-gray-600 text-sm">Periode</label>
-                            <input type="month" id="period" name="period" value="{{ old('period') }}"
-                                class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required {{ isset($member->id) ? "readonly" : "" }}>
-                        </div>
-                        <div>
-                            <label for="amount" class="text-gray-600 text-sm">Nominal</label>
-                            <input type="number" id="amount" name="amount" value="{{ old('amount')}}"
-                                class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
-                        </div>
-                        <div>
-                            <label for="name" class="text-gray-600 text-sm">Untuk</label>
-                            <div class="flex gap-5">
-                                <div class="flex items-center gap-1" onchange="hideInputAnggotaKas()">
-                                    <input type="radio" id="for_all" name="for" checked>
-                                    <label for="for_all" class="text-sm">Semua Anggota Aktif</label>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <input type="radio" id="for_select" name="for" onchange="showInputAnggotaKas()">
-                                    <label for="for_select" class="text-sm">Anggota Tertentu</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div id="input-anggota-kas" class="hidden">
+                            <div id="input-anggota-kas">
                                 <label for="members" class="text-gray-600 text-sm">Pilih Anggota</label>
                                 <div class="text-sm w-full relative">
                                     <div class="flex items-center gap-2">
@@ -140,6 +117,21 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div>
+                            <label for="date_of_death" class="text-gray-600 text-sm">Tanggal Duka</label>
+                            <input type="date" id="date_of_death" name="date_of_death" value="{{ old('date_of_death')}}"
+                                class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
+                        </div>
+                        <div>
+                            <label for="address" class="text-gray-600 text-sm">Alamat Rumah Duka</label>
+                            <textarea id="address" name="address" value="{{ old('address')}}"
+                                class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required></textarea>
+                        </div>
+                        <div>
+                            <label for="contribution_amount" class="text-gray-600 text-sm">Nominal Sumbangan (Per Kartu Keluarga)</label>
+                            <input type="number" id="contribution_amount" name="contribution_amount" value="{{ old('contribution_amount')}}"
+                                class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" required>
                         </div>
                         <div class="flex items-center gap-2">
                             <button type="submit"
@@ -161,7 +153,7 @@
                                 </svg>
                                 Simpan
                             </button>
-                            <a href="{{ route("admin_kas") }}">
+                            <a href="{{ route("admin_duka") }}">
                                 <button type="button"
                                     class="px-5 py-2 flex items-center gap-1 bg-gray-200 border border-gray-300 text-sm font-semibold rounded-md transition-all duration-200 ease-in-out hover:bg-gray-300">
                                     Batal
@@ -186,10 +178,11 @@
         formAdd.addEventListener("submit", async (e) => {
             e.preventDefault()
 
-            const period = document.getElementById('period').value
-            const amount = document.getElementById('amount').value
+            const dateOfDeath = document.getElementById('date_of_death').value
+            const address = document.getElementById('address').value
+            const contributionAmount = document.getElementById('contribution_amount').value
 
-            fetch('/admin/kas/create', {
+            fetch('/admin/duka/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -197,9 +190,10 @@
                 },
                 body: JSON.stringify({
                     items: {
-                        period,
-                        amount,
-                        members: selectedMembers
+                        member: selectedMembers[0]["id"],
+                        date_of_death: dateOfDeath,
+                        address: address,
+                        contribution_amount: contributionAmount
                     }
                 })
             }).then(res => res.json())
@@ -226,9 +220,10 @@
         function render(members) {
             let tempSelected = ""
             members.map((member) => {
+                console.log(member)
                 tempSelected += `
                     <div class="border border-gray-300 bg-white p-2 flex items-center gap-5 justify-between rounded">
-                        <p>${member["id"]} - ${member["family_card"]}</p>
+                        <p>${member["id"]} - ${member["name"]}</p>
                             <button
                                 type='button'
                                 onclick="removeSelected(${member["id"]})"
@@ -268,10 +263,10 @@
                             data.forEach(member => {
                                 html += `
                                 <div class="border border-gray-300 bg-gray-100 p-2 flex items-center gap-5 justify-between rounded">
-                                    <p>${member["id"]} - ${member.head.name}</p>
+                                    <p>${member["id"]} - ${member.name}</p>
                                         <button
                                         type='button'
-                                            onclick="test('${member["id"]}', '${member.head.name}')"
+                                            onclick="test('${member["id"]}', '${member.name}')"
                                             class="p-2 flex items-center gap-1 bg-green-800 text-sm font-semibold rounded-md text-white transition-all duration-200 ease-in-out hover:bg-green-700">
                                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"
                                                 class="w-4 h-4">
