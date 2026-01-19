@@ -20,6 +20,8 @@ class MidtransCallbackController extends Controller
             $payment = Payment::with("donation")->where('order_id', $request->order_id)->first();
         }
 
+        Log::info("CHECKPAYMENT : " . $payment->get());
+
         $payment->update([
             'transaction_status' => $request->transaction_status,
             'payment_type' => $request->payment_type,
@@ -29,11 +31,10 @@ class MidtransCallbackController extends Controller
         if(in_array($request->transaction_status, ['settlement', 'capture'])) {
             $cashTransaction = new CashTransactionService();
 
-            $contributions = Contribution::where("family_card_id", "=", $payment->first()->snap_token)->where("status", "=", "pending")->get();
-            Log::info("DONE BANG : " . $contributions);
-
             $orderType = explode("--", $payment->first()->order_id)[0];
             if($orderType == "CONTRIBUTION") {
+                $contributions = Contribution::where("family_card_id", "=", $payment->first()->snap_token)->where("status", "=", "pending")->get();
+                Log::info("DONE BANG : " . $contributions);
                 foreach ($contributions as $contribution) {
                     $cashTransaction->incomeFromContribution($contribution);
                     $contribution->update([
@@ -41,7 +42,7 @@ class MidtransCallbackController extends Controller
                     ]);
                 }
             } elseif ($orderType == "DONATION") {
-                $cashTransaction->incomeFromDonation($contributions);
+                // $cashTransaction->incomeFromDonation($contributions);
             } elseif ($orderType == "REGISTRATION") {
                 $family_card = FamilyCard::find(explode("--", $payment->order_id)[1]);
 
@@ -55,7 +56,7 @@ class MidtransCallbackController extends Controller
                     "password" => Hash::make($password),
                     "phone" => null
                 ]);
-                $cashTransaction->incomeFromRegistration($contrib);
+                $cashTransaction->incomeFromRegistration($family_card);
             }
             $payment->update([
                 'fraud_status' => 'paid'
