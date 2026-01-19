@@ -30,10 +30,16 @@ class MemberController extends Controller
     public function kas()
     {
         $donations = Donation::where("member_id", "=", auth()->user()->id)->get();
-        $contributions = Contribution::with(["death_event.member"])->where("family_card_id", "=", auth()->user()->id)->get();
+        $contributions = Contribution::with(["death_event.member"])->where("family_card_id", "=", auth()->user()->id)->where("status", "=", "pending")->get();
         return view('member/kas/index', [
             "contributions" => $contributions,
             "donations" => $donations,
+        ]);
+    }
+
+    public function riwayat()
+    {
+        return view('member/riwayat/index', [
         ]);
     }
 

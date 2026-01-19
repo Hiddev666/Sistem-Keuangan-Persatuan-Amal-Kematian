@@ -75,9 +75,10 @@ Route::middleware(['auth:web'])->group(function () {
 
 Route::middleware(['auth:member'])->group(function () {
     Route::get("member/dashboard", [MemberController::class, 'index'])->name("member_dashboard");
-    Route::get("member/kas", [MemberController::class, 'kas'])->name("member_kas");
+    Route::get("member/payments", [MemberController::class, 'kas'])->name("member_kas");
     Route::get("member/kas/pay/{id}", [PaymentController::class, 'payContribution'])->name("member_kas_pay");
     Route::get("member/kas/pay", [PaymentController::class, 'payContributions'])->name("member_kas_pays");
     Route::get("member/donasi", [MemberController::class, 'donasi'])->name("member_donasi");
     Route::post("member/donasi/pay", [PaymentController::class, 'payDonation'])->name("member_donasi_pay");
+    Route::get("member/histories", [MemberController::class, 'riwayat'])->name("member_riwayat");
 });

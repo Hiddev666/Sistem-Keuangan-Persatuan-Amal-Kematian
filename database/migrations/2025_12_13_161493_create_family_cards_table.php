@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('family_cards', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('head_member_id');
+            $table->string('head_member_id')->nullable(true);
             $table->string('password')->nullable(true);
             $table->text('address')->nullable(true);
             $table->string('phone')->nullable(true);

@@ -3,7 +3,7 @@
 @section('title', 'Dashboard | Sistem Keuangan Persatuan Amal Kematian')
 
 @section('content')
-    <div class="mb-8 py-4 px-0 md:px-8 flex flex-col gap-5">
+    <div class="mt-5 mb-8 py-4 px-0 md:px-8 flex flex-col gap-5">
         <div class="">
             <h1 class="text-3xl font-semibold">
                 Pembayaran
@@ -18,11 +18,36 @@
         @endif
 
         <div class="flex justify-center gap-5 w-full flex-col md:flex-row">
-            <div class="w-full md:w-1/2 p-3 border border-gray-300 rounded-md flex flex-col gap-2 overflow-x-auto">
+            <div class="w-full md:w-1/2 p-3 border border-gray-300 rounded-md flex flex-col gap-5 overflow-x-auto">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-2xl font-semibold">Tagihan Duka</h2>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-green-800 rounded-full"></div>
+                            <h2 class="text-xl font-semibold">Tagihan Duka</h2>
+                        </div>
                         <p class="text-sm text-gray-500">Tagihan Wajib Untuk Setiap Kabar Duka</p>
+                    </div>
+                </div>
+                <table class="text-sm w-full">
+                    <thead class="bg-gray-100 border border-gray-300">
+                        <th class="font-normal p-3 text-start">Tanggal</th>
+                        <th class="font-normal p-3 text-start">Yang Berpulang</th>
+                        <th class="font-normal p-3 text-start">Nominal</th>
+                    </thead>
+                    <tbody id="result">
+                        @foreach ($contributions as $contribution)
+                                    <tr class="border-b border-gray-200 transition-all ease-in-out">
+                                        <td class="font-normal p-2 text-start font-semibold w-max">{{ formatTanggalIndonesia($contribution->created_at) }}</td>
+                                        <td class="font-normal p-2 text-start font-semibold w-max">{{ $contribution->death_event->member->name }}</td>
+                                        <td class="font-normal p-2 text-start font-medium w-max">{{ rupiah($contribution->amount) }}</td>
+                                    </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="w-full flex justify-between items-center px-3">
+                    <div>
+                        <p class="text-gray-500 text-sm">Total</p>
+                        <p class="text-xl font-bold">{{ rupiah($contributions->sum("amount")) }}</p>
                     </div>
                     <a href="{{ route("member_kas_pays") }}">
                         <button
@@ -30,47 +55,18 @@
                             Bayar Semua</button>
                     </a>
                 </div>
-                <table class="text-sm w-full">
-                    <thead class="bg-gray-100 border border-gray-300">
-                        <th class="font-normal p-3 text-center">Tanggal</th>
-                        <th class="font-normal p-3 text-start">Yang Berpulang</th>
-                        <th class="font-normal p-3 text-center">Nominal</th>
-                        <th class="font-normal p-3 text-center">Status Pembayaran</th>
-                    </thead>
-                    <tbody id="result">
-                        @foreach ($contributions as $contribution)
-                                    <tr class="border-b border-gray-200 transition-all ease-in-out">
-                                        <td class="font-normal p-2 text-center font-semibold w-max">{{ formatTanggalIndonesia($contribution->created_at) }}</td>
-                                        <td class="font-normal p-2 text-center font-semibold w-max">{{ $contribution->death_event->member->name }}</td>
-                                        <td class="font-normal p-2 text-center font-medium w-max">{{ rupiah($contribution->amount) }}</td>
-                                        <td class="font-normal p-2 text-center font-medium align-middle">
-                                            <div class="flex items-center gap-1 justify-center">
-                                                <div class="w-3 h-3 rounded-full {{ $contribution->status == 'failed' || $contribution->status == 'expired'
-                            ? 'bg-red-800'
-                            : ($contribution->status == 'pending'
-                                ? 'bg-orange-500'
-                                : ($contribution->status == 'paid'
-                                    ? 'bg-green-800'
-                                    : ''
-                                )
-                            ) }}">
-                                                </div>
-                                                <p class="p-0 m-0">
-                                                    {{ $contribution->status == "paid" ? "Dibayar" : "Belum Dibayar" }}
-                                                </p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                        @endforeach
-                    </tbody>
-                </table>
             </div>
 
-            <div class="w-full md:w-1/2 p-3 border border-gray-300 rounded-md flex flex-col gap-2 overflow-x-auto">
+            <div class="w-full md:w-1/2 p-3 border border-gray-300 rounded-md flex flex-col gap-5 overflow-x-auto">
                 <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-semibold">Donasi</h2>
-                        <p class="text-sm text-gray-500">Donasi Sukarela</p>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 bg-green-800 rounded-full"></div>
+                                <h2 class="text-xl font-semibold">Donasi</h2>
+                            </div>
+                            <p class="text-sm text-gray-500">Donasi Sukarela</p>
+                        </div>
                     </div>
                     <a href="{{ route("member_donasi") }}">
                         <button
@@ -140,6 +136,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                @if(count($donations) == 0)
+                    <p class="text-sm text-center text-gray-700">Belum Ada Donasi</p>
+                @endif
             </div>
         </div>
     </div>

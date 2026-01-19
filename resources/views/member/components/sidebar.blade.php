@@ -16,6 +16,9 @@
             <a href="{{ route("member_kas") }}">
                 <p>Pembayaran</p>
             </a>
+            <a href="{{ route("member_riwayat") }}">
+                <p>Riwayat</p>
+            </a>
         </div>
         <form action="{{ route('logout') }}" method="post">
             @csrf

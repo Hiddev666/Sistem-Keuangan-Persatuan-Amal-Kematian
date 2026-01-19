@@ -40,7 +40,8 @@ class PaymentController extends Controller
         ];
 
         $snapToken = Snap::getSnapToken($params);
-        return view('member/kas/pay', compact('snapToken', 'payment', 'contributions', 'params'));
+        $contributions_data = $contributions->get();
+        return view('member/kas/pay', compact('snapToken', 'payment', 'contributions_data', 'params'));
     }
 
 
