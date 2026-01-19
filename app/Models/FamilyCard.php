@@ -25,11 +25,13 @@ class FamilyCard extends Authenticatable
     protected $fillable = [
         'id',
         'head_member_id',
-        'password'
+        'password',
+        'card_image',
+        'phone',
+        'address'
     ];
 
     protected $hidden = [
-        'password',
     ];
 
     public function members()

@@ -6,14 +6,15 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // Auth
 Route::get("sign-in", [AuthController::class, 'signIn'])->name("sign-in");
 Route::post("login", [AuthController::class, 'login'])->name("login");
 Route::post("logout", [AuthController::class, 'logout'])->middleware('auth')->name("logout");
+Route::get("registration/pay/{id}", [PaymentController::class, 'payRegistration'])->name("registration_pay");
 
 
 // Admin
@@ -76,6 +77,7 @@ Route::middleware(['auth:member'])->group(function () {
     Route::get("member/dashboard", [MemberController::class, 'index'])->name("member_dashboard");
     Route::get("member/kas", [MemberController::class, 'kas'])->name("member_kas");
     Route::get("member/kas/pay/{id}", [PaymentController::class, 'payContribution'])->name("member_kas_pay");
+    Route::get("member/kas/pay", [PaymentController::class, 'payContributions'])->name("member_kas_pays");
     Route::get("member/donasi", [MemberController::class, 'donasi'])->name("member_donasi");
     Route::post("member/donasi/pay", [PaymentController::class, 'payDonation'])->name("member_donasi_pay");
 });

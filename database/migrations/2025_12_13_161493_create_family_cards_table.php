@@ -15,6 +15,9 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->string('head_member_id');
             $table->string('password')->nullable(true);
+            $table->text('address')->nullable(true);
+            $table->string('phone')->nullable(true);
+            $table->text('card_image')->nullable(true);
             $table->timestamps();
         });
     }

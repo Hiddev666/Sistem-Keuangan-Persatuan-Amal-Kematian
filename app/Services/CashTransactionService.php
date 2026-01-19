@@ -6,6 +6,7 @@ use App\Models\Benefit;
 use App\Models\CashTransaction;
 use App\Models\Contribution;
 use App\Models\Donation;
+use App\Models\FamilyCard;
 
 class CashTransactionService
 {
@@ -112,6 +113,26 @@ class CashTransactionService
                 'description'      => "donation ssadasdasd"
             ]);
         }
+    }
+
+    public function incomeFromRegistration(FamilyCard $familyCard): void
+    {
+        // ❌ Cegah double kas
+        if ($this->exists('family_card', $familyCard->id)) {
+            return;
+        }
+
+        CashTransaction::create([
+            'reference_type'   => 'registration',
+            'reference_id'     => $familyCard->id,
+            'type'             => 'income',
+            'amount'           => 100000,
+            'transaction_date' => now(),
+            'description'      => sprintf(
+                'Registration %s',
+                $familyCard->id
+            ),
+        ]);
     }
 
     protected function exists(string $type, int $id): bool

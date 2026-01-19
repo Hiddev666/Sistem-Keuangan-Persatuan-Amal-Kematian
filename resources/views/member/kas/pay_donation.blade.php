@@ -3,7 +3,7 @@
 @section('title', 'Dashboard | Sistem Keuangan Persatuan Amal Kematian')
 
 @section('content')
-<script src="https://app.sandbox.midtrans.com/snap/snap.js"
+<script src="https://app.midtrans.com/snap/snap.js"
     data-client-key="{{ config('services.midtrans.client_key') }}"></script>
     <div class="mb-8 py-4 px-8 flex justify-center items-center">
             <div class="border border-gray-300 p-3 rounded w-full md:w-1/3 flex flex-col gap-4">

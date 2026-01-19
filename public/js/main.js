@@ -47,3 +47,11 @@ function showInputAnggotaKas() {
 function hideInputAnggotaKas() {
     inputAnggotaKas.classList.add("hidden")
 }
+
+function showKKPopup() {
+    document.getElementById("kk_popup").classList.remove("hidden")
+}
+
+function closeKKPopup() {
+    document.getElementById("kk_popup").classList.add("hidden")
+}

@@ -155,16 +155,27 @@ class AdminController extends Controller
         $validated = $request->validate([
             'id' => ['required', 'string'],
             'password' => ['required', 'string'],
+            'address' => ['required', 'string'],
+            'phone' => ['required', 'string'],
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'head_member_id' => ['string'],
         ]);
 
         try {
+            $imagePath = $request->file('image')->store("kartu_keluarga", "public");
             $familyCard = FamilyCard::create([
                 'id' => $validated['id'],
                 'password' => Hash::make($validated['password']),
                 'head_member_id' => $validated['head_member_id'] ?? "",
+                'address' => $validated['address'],
+                'phone' => $validated['phone'],
+                'card_image' => $imagePath
             ]);
 
+            $fonnte = new FonnteService();
+            $id = $validated['id'];
+            $url = config('app.url') . "/registration/pay/" . $id;
+            $fonnte->send($validated["phone"], "*Registrasi Keanggotaan Persatuan Amal Kematian* \n Nomor Kartu Keluarga anda akan didaftarkan sebagai anggota Persatuan Amal Kematian. Registrasi anggota baru dikenakan biaya sebesar Rp 100.000, silahkan selesaikan pembayaran melalui link di bawah ini untuk menyelesaikan registrasi keanggotaan. \n Link Pembayaran: $url \n Terima Kasih. Salam Hangat, \n Pengurus Persatuan Amal Kematian");
             return redirect()->route("admin_keanggotaan")->with("success", "Berhasil Menambahkan Kartu Keluarga Baru");
         } catch (QueryException $err) {
             if ($err->errorInfo[1] == 1062) {
@@ -334,16 +345,8 @@ class AdminController extends Controller
             $member = FamilyCard::findOrFail($id)->delete();
             return redirect()->route("admin_keanggotaan")->with("success", "Data Keanggotaan Berhasil Dihapus");
         } catch (QueryException $err) {
-            if ($err->errorInfo[1] == 1062) {
-                return redirect()
-                    ->back()
-                    ->withInput()
-                    ->withErrors([
-                        'nik' => 'NIK sudah terdaftar'
-                    ]);
-            }
+            return $err->getMessage();
         }
-        return "ok";
     }
     public function deleteAnggota($id)
     {
@@ -557,7 +560,8 @@ class AdminController extends Controller
         $contribution_amount = $items["contribution_amount"];
 
         try {
-            $death_member = Member::find($member)->update([
+            $death_member = Member::find($member);
+            $death_member->update([
                 "status" => "meninggal"
             ]);
 
@@ -573,6 +577,9 @@ class AdminController extends Controller
             $family_cards = FamilyCard::with("head")->get();
 
             foreach ($family_cards as $family_card) {
+                if($family_card["id"] == $death_member->first()->family_card_id) {
+                    continue;
+                }
                 $contribution = Contribution::create([
                     'family_card_id' => $family_card["id"],
                     'death_event_id' => $death_event_id->id,

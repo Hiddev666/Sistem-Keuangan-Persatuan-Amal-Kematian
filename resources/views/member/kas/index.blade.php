@@ -19,9 +19,16 @@
 
         <div class="flex justify-center gap-5 w-full flex-col md:flex-row">
             <div class="w-full md:w-1/2 p-3 border border-gray-300 rounded-md flex flex-col gap-2 overflow-x-auto">
-                <div>
-                    <h2 class="text-2xl font-semibold">Tagihan Duka</h2>
-                    <p class="text-sm text-gray-500">Tagihan Wajib Untuk Setiap Kabar Duka</p>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold">Tagihan Duka</h2>
+                        <p class="text-sm text-gray-500">Tagihan Wajib Untuk Setiap Kabar Duka</p>
+                    </div>
+                    <a href="{{ route("member_kas_pays") }}">
+                        <button
+                            class="px-3 py-2 flex items-center gap-1 bg-green-800 text-sm font-semibold rounded-md text-white transition-all duration-200 ease-in-out hover:bg-green-700">
+                            Bayar Semua</button>
+                    </a>
                 </div>
                 <table class="text-sm w-full">
                     <thead class="bg-gray-100 border border-gray-300">
@@ -29,7 +36,6 @@
                         <th class="font-normal p-3 text-start">Yang Berpulang</th>
                         <th class="font-normal p-3 text-center">Nominal</th>
                         <th class="font-normal p-3 text-center">Status Pembayaran</th>
-                        <th class="font-normal p-3 text-center">Action</th>
                     </thead>
                     <tbody id="result">
                         @foreach ($contributions as $contribution)
@@ -53,17 +59,6 @@
                                                     {{ $contribution->status == "paid" ? "Dibayar" : "Belum Dibayar" }}
                                                 </p>
                                             </div>
-                                        </td>
-                                        <td class="font-normal p-2 text-center font-medium">
-                                            @if($contribution->status != "paid")
-                                            <a href="{{ route("member_kas_pay", $contribution["id"]) }}">
-                                                <button class="p-2 px-4 rounded-md bg-green-800 font-semibold text-white hover:bg-green-700 w-max">
-                                                    Bayar Di Sini
-                                                </button>
-                                            </a>
-                                            @else
-                                            <p>-</p>
-                                            @endif
                                         </td>
                                     </tr>
                         @endforeach

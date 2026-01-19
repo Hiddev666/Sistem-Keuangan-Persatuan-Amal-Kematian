@@ -70,7 +70,7 @@
             @endif
             <table class="text-sm w-full">
                 <thead class="bg-gray-100 border border-gray-300">
-                    <th class="font-normal p-3 text-left">NIK</th>
+                    <th class="font-normal p-3 text-left">Nomor KK</th>
                     <th class="font-normal p-3 text-left">Nama</th>
                     <th class="font-normal p-3 text-left">Nominal</th>
                     <th class="font-normal p-3 text-center">Status Pembayaran</th>

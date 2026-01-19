@@ -100,12 +100,13 @@
                         <tr
                             class="border-b border-gray-200 transition-all ease-in-out">
                             <td class="font-normal p-2 text-left font-semibold">{{ $family_card["id"] }}</td>
-                            <td class="font-normal p-2 text-left font-semibold">{{ $family_card->head->name ?? "-" }}</td>
+                            <td class="font-normal p-2 text-left font-semibold">{{ $family_card->head->name ?? ($family_card->phone != null ? "Registrasi Belum Dibayar" : "-") }}</td>
                             <td class="font-normal p-2 text-center font-semibold">{{ count(array_filter($family_card->members->toArray(), function($value) {
                                 return $value["status"] == "aktif";
                             })) }} Orang</td>
                             <td class="font-normal p-2 text-right font-medium">
                                 <div class="flex items-center justify-end gap-1">
+                                    @if ($family_card->phone == null)
                                     <a href="{{ route("admin_keanggotaan_edit", $family_card["id"]) }}">
                                         <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200">
                                             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -121,6 +122,7 @@
                                             </svg>
                                         </button>
                                     </a>
+                                    @endif
                                     @if (auth()->user()->role == "admin" || auth()->user()->role == "ketua")
                                     <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200"
                                         onclick="showDeletePopup('{{ $family_card['id'] }}', this, 'keanggotaan/delete')">

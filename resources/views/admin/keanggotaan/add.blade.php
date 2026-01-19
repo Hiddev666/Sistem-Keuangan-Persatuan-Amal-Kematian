@@ -13,8 +13,22 @@
                     <p class="text-sm text-red-600">{{ $message }}</p>
                 </div>
             @enderror
+            @if (isset($family_card))
+            <div id="kk_popup" class="hidden border border-gray-300 w-full h-screen top-0 left-0 fixed bg-black/50 flex justify-center items-center">
+                <div class="bg-white border border-gray-300 p-3 rounded-md w-1/2 flex flex-col gap-3">
+                    <div class="flex w-full justify-end items-center">
+                            <button type="button"
+                            onclick="closeKKPopup()"
+                                class="px-5 py-2 flex items-center gap-1 bg-gray-200 border border-gray-300 text-sm font-semibold rounded-md transition-all duration-200 ease-in-out hover:bg-gray-300">
+                                Tutup
+                            </button>
+                    </div>
+                    <img src="{{ asset('storage/' . $family_card->card_image) }}" class="w-full">
+                </div>
+            </div>
+            @endif
             <form action="{{ isset($family_card) ? route("admin_keanggotaan_update") : route("admin_keanggotaan_create") }}"
-                method="post" class="flex flex-col gap-5">
+                method="post" enctype="multipart/form-data" class="flex flex-col gap-5">
                 @csrf
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -27,6 +41,30 @@
                         <input type="text" id="password" name="password" value="{{ old('password')}}"
                             class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" {{ !isset($family_card) ? "required" : "" }}>
                     </div>
+                    <div>
+                        <label for="address" class="text-gray-600 text-sm">Alamat</label>
+                        <textarea type="text" id="address" name="address"
+                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md">{{ old('address') ?? $family_card->address ?? ""}}</textarea>
+                    </div>
+                    @if (isset($family_card))
+                    <div>
+                        <label for="image" class="text-gray-600 text-sm">Foto Kartu Keluarga</label>
+                        <div class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md">
+                            <button type="button" onclick="showKKPopup()" class="border border-gray-300 p-2 rounded-md hover:bg-gray-300">Lihat Kartu Keluarga</button>
+                        </div>
+                    </div>
+                    @else
+                    <div>
+                        <label for="image" class="text-gray-600 text-sm">Upload Foto Kartu Keluarga</label>
+                        <input type="file" id="image" name="image" value="{{ old('image')}}"
+                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" {{ !isset($family_card) ? "required" : "" }}>
+                    </div>
+                    <div>
+                        <label for="phone" class="text-gray-600 text-sm">Nomor Telepon Registrasi</label>
+                        <input type="text" id="phone" name="phone" value="{{ old('phone')}}"
+                            class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" {{ !isset($family_card) ? "required" : "" }}>
+                    </div>
+                    @endif
             @if (isset($family_card))
             <div>
                 <label for="head_member_id" class="text-gray-600 text-sm">Kepala Keluarga</label>

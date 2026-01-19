@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contribution;
 use App\Models\Donation;
+use App\Models\FamilyCard;
 use App\Models\Payment;
 use App\Services\MidtransService;
 use Illuminate\Http\Request;
@@ -12,13 +13,44 @@ use Midtrans\Snap;
 
 class PaymentController extends Controller
 {
+
+    public function payContributions()
+    {
+        $contributions = Contribution::with("family_card.head")->where("family_card_id", "=", auth()->user()->id)->where("status", "=", "pending");
+        MidtransService::init();
+
+        $orderID = 'CONTRIBUTION--' . Str::uuid();
+        $payment = Payment::create([
+            'order_id' => $orderID,
+            'payment_type' => 'midtrans',
+            'transaction_status' => 'pending',
+            'gross_amount' => $contributions->get()->sum("amount"),
+            'snap_token' => auth()->user()->id
+        ]);
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $orderID,
+                'gross_amount' => $contributions->get()->sum("amount")
+            ],
+            'customer_details' => [
+                'first_name' => $contributions->get()[0]->family_card->head->name,
+                'phone' => $contributions->get()[0]->family_card->head->phone
+            ]
+        ];
+
+        $snapToken = Snap::getSnapToken($params);
+        return view('member/kas/pay', compact('snapToken', 'payment', 'contributions', 'params'));
+    }
+
+
     public function payContribution($id)
     {
         $contribution = Contribution::with("family_card.head")->findOrFail($id);
 
         MidtransService::init();
 
-        $orderID = 'ORDER-' . Str::uuid();
+        $orderID = 'CONTRIBUTION--' . Str::uuid();
         $payment = Payment::create([
             'order_id' => $orderID,
             'payment_type' => 'midtrans',
@@ -47,7 +79,7 @@ class PaymentController extends Controller
         MidtransService::init();
 
         $id = Str::uuid();
-        $orderID = 'ORDER-' . Str::uuid();
+        $orderID = 'DONATION--' . Str::uuid();
 
         $donation = Donation::create([
             "member_id" => auth()->user()->id,
@@ -81,6 +113,37 @@ class PaymentController extends Controller
 
         $snapToken = Snap::getSnapToken($params);
         return view('member/kas/pay_donation', compact('snapToken', 'payment'));
+    }
+
+    public function payRegistration($id)
+    {
+        $amount = 100;
+        $family_card = FamilyCard::findOrFail($id)->first();
+
+        MidtransService::init();
+
+        $orderID = 'REGISTRATION--' . $id . "--" . rand(1, 100);
+        $payment = Payment::create([
+            'order_id' => $orderID,
+            'payment_type' => 'midtrans',
+            'transaction_status' => 'pending',
+            'gross_amount' => $amount,
+            'snap_token' => $id
+        ]);
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $orderID,
+                'gross_amount' => $amount,
+            ],
+            'customer_details' => [
+                'first_name' => "Registrasi NIK " . $family_card->id,
+                'phone' => $family_card->phone
+            ]
+        ];
+
+        $snapToken = Snap::getSnapToken($params);
+        return view('member/kas/pay', compact('snapToken', 'payment', 'family_card'));
     }
 
     /**
