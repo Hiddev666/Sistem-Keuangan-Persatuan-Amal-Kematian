@@ -83,7 +83,7 @@ class PaymentController extends Controller
         $orderID = 'DONATION--' . Str::uuid();
 
         $donation = Donation::create([
-            "member_id" => auth()->user()->id,
+            "family_card_id" => auth()->user()->id,
             "amount" => $request->amount,
             "status" => "pending"
         ]);

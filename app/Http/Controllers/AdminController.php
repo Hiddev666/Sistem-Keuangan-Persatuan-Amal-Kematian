@@ -577,7 +577,7 @@ class AdminController extends Controller
             $family_cards = FamilyCard::with("head")->get();
 
             foreach ($family_cards as $family_card) {
-                if($family_card["id"] == $death_member->first()->family_card_id) {
+                if($family_card["id"] == $death_member->family_card_id) {
                     continue;
                 }
                 $contribution = Contribution::create([

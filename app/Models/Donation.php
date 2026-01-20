@@ -12,7 +12,7 @@ class Donation extends Model
 
     protected $fillable = [
         'donor_name',
-        'member_id',
+        'family_card_id',
         'amount',
         'status',
         'payment_id',
@@ -26,12 +26,12 @@ class Donation extends Model
 
     public function member()
     {
-        return $this->belongsTo(FamilyCard::class, 'member_id', 'id');
+        return $this->belongsTo(FamilyCard::class, 'family_card_id', 'id');
     }
 
     public function family_card()
     {
-        return $this->belongsTo(FamilyCard::class, 'member_id', 'id');
+        return $this->belongsTo(FamilyCard::class, 'family_card_id', 'id');
     }
 
     public function payment()

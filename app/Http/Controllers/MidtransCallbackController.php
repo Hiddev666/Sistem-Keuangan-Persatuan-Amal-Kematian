@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contribution;
+use App\Models\Donation;
 use Illuminate\Support\Facades\Log;
 use App\Models\FamilyCard;
 use App\Models\Payment;
@@ -15,10 +16,7 @@ use Illuminate\Support\Facades\Hash;
 class MidtransCallbackController extends Controller
 {
     public function handle(Request $request) {
-        $payment = Payment::with("contribution")->where('order_id', $request->order_id);
-        if(!$payment) {
-            $payment = Payment::with("donation")->where('order_id', $request->order_id)->first();
-        }
+        $payment = Payment::with(["contribution", "donation"])->where('order_id', $request->order_id);
 
         Log::info("CHECKPAYMENT : " . $payment->get());
 
@@ -30,7 +28,6 @@ class MidtransCallbackController extends Controller
 
         if(in_array($request->transaction_status, ['settlement', 'capture'])) {
             $cashTransaction = new CashTransactionService();
-
             $orderType = explode("--", $payment->first()->order_id)[0];
             if($orderType == "CONTRIBUTION") {
                 $contributions = Contribution::where("family_card_id", "=", $payment->first()->snap_token)->where("status", "=", "pending")->get();
@@ -42,7 +39,8 @@ class MidtransCallbackController extends Controller
                     ]);
                 }
             } elseif ($orderType == "DONATION") {
-                // $cashTransaction->incomeFromDonation($contributions);
+                $donation = Donation::where("payment_id", "=", $payment->first()->id)->first();
+                $cashTransaction->incomeFromDonation($donation);
             } elseif ($orderType == "REGISTRATION") {
                 $family_card = FamilyCard::find(explode("--", $payment->order_id)[1]);
 
