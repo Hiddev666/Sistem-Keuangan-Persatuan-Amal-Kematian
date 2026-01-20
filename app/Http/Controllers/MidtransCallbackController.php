@@ -42,7 +42,7 @@ class MidtransCallbackController extends Controller
                 $donation = Donation::where("payment_id", "=", $payment->first()->id)->first();
                 $cashTransaction->incomeFromDonation($donation);
             } elseif ($orderType == "REGISTRATION") {
-                $family_card = FamilyCard::find(explode("--", $payment->order_id)[1]);
+                $family_card = FamilyCard::find(explode("--", $payment->first()->order_id)[1]);
 
                 $fonnte = new FonnteService();
                 $id = $family_card->id;
