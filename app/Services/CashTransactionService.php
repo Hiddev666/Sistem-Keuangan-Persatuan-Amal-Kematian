@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Benefit;
 use App\Models\CashTransaction;
 use App\Models\Contribution;
+use App\Models\DeathEvent;
 use App\Models\Donation;
 use App\Models\FamilyCard;
 
@@ -30,6 +31,8 @@ class CashTransactionService
                 "amount" => $benefitData->amount + $contribution->amount
             ]);
 
+            $deathEvent = DeathEvent::with('member')->find($contribution->death_event_id);
+
             CashTransaction::create([
                 'reference_type'   => 'contribution',
                 'reference_id'     => $contribution->id,
@@ -37,9 +40,9 @@ class CashTransactionService
                 'amount'           => $contribution->amount,
                 'transaction_date' => now(),
                 'description'      => sprintf(
-                    'Contribution %s - %s',
-                    $contribution->period,
-                    $contribution->family_card->id,
+                    'Tagihan Duka %s Untuk %s',
+                    $contribution->family_card_id,
+                    $deathEvent->member->name,
                 ),
             ]);
         }
@@ -74,6 +77,7 @@ class CashTransactionService
         // if ($saldoKas < $benefit->amount) {
         //     throw new \Exception('Saldo kas tidak mencukupi');
         // }
+        $death_event = DeathEvent::with('member')->find($benefit->death_event_id);
 
         // 💸 Buat transaksi kas (uang keluar)
         CashTransaction::create([
@@ -83,8 +87,8 @@ class CashTransactionService
             'amount'           => $benefit->amount,
             'transaction_date' => now(),
             'description'      => sprintf(
-                'Pembayaran santunan - Event %s',
-                $benefit->death_event_id
+                'Pembayaran Santunan %s',
+                $death_event->member->name
             ),
         ]);
     }
@@ -110,7 +114,10 @@ class CashTransactionService
                 'type'             => 'income',
                 'amount'           => $donation->amount,
                 'transaction_date' => now(),
-                'description'      => "donation ssadasdasd"
+                'description'      => sprintf(
+                    'Donasi dari %s',
+                    $donation->family_card->id ?? $donation->donor_name
+                ),
             ]);
         }
     }

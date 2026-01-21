@@ -35,4 +35,12 @@ class CashTransaction extends Model
     {
         return $this->morphTo(__FUNCTION__, 'reference_type', 'reference_id');
     }
+
+    public function donation() {
+        return $this->belongsTo(Donation::class, "reference_id", "id");
+    }
+
+    public function contribution() {
+        return $this->belongsTo(Contribution::class, "reference_id", "id");
+    }
 }

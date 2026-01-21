@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 @if (auth()->user()->role == "admin" || auth()->user()->role == "ketua")
-                <a href="{{ route("admin_duka_confirm", $contributions[0]->death_event->id) }}">
+                <a href="{{ route("admin_duka_confirm_form", $contributions[0]->death_event->id) }}">
                     <button
                         class="px-3 py-2 flex items-center gap-1 text-sm font-semibold rounded-md text-white transition-all duration-200 ease-in-out {{ $contributions[0]->death_event->benefit->status == "planed" ? "bg-green-800 hover:bg-green-700 " : "bg-gray-400 hover:bg-gray-400 cursor-not-allowed" }}" {{ $contributions[0]->death_event->benefit->status == "planed" ? "" : "disabled" }}>
                         {{ $contributions[0]->death_event->benefit->status == "planed" ? "Berikan Santunan" : "Santunan Telah Diberikan" }}</button>

@@ -52,7 +52,8 @@ Route::middleware(['auth:web'])->group(function () {
     // Kejadian Duka
     Route::get("admin/duka", [AdminController::class, 'duka'])->name("admin_duka");
     Route::get("admin/duka/detail/{id}", [AdminController::class, 'detailDuka'])->name("admin_duka_detail");
-    Route::get("admin/duka/detail/confirm/{id}", [AdminController::class, 'confirmDuka'])->name("admin_duka_confirm");
+    Route::get("admin/duka/detail/confirm/form/{id}", [AdminController::class, 'confirmDukaForm'])->name("admin_duka_confirm_form");
+    Route::post("admin/duka/detail/confirm", [AdminController::class, 'confirmDuka'])->name("admin_duka_confirm");
     Route::get("admin/duka/detail/contrib/edit/{id}", [AdminController::class, 'editDukaContrib'])->name("admin_duka_contrib_edit");
     Route::get("admin/duka/detail/contrib/delete/{id}", [AdminController::class, 'deleteDukaContrib'])->name("admin_duka_contrib_delete");
     Route::post("admin/duka/detail/contrib/update", [AdminController::class, 'updateDukaContrib'])->name("admin_duka_contrib_update");

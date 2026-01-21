@@ -639,9 +639,19 @@ class AdminController extends Controller
         }
     }
 
-    public function confirmDuka($id)
+
+    public function confirmDukaForm($id) {
+        $death_event = DeathEvent::find($id);
+        return view('admin/berita-duka/confirm', [
+            "death_event" => $death_event
+        ]);
+    }
+
+    public function confirmDuka(Request $request)
     {
         try {
+            $id = $request->id;
+            $amount = $request->amount;
             $death_events = DeathEvent::with(['member', 'benefit'])
                 ->withCount([
                     'contributions as total_benefit' => function ($q) {
@@ -655,12 +665,11 @@ class AdminController extends Controller
             $cashTransaction = new CashTransactionService();
 
             $benefit = Benefit::find($id);
-            $cashTransaction->expenseFromBenefit($benefit);
             $benefit->update([
                 "status" => "disbursed",
-                "amount" => $death_events->contribution_amount * $death_events->total_benefit,
+                "amount" => $amount,
             ]);
-
+            $cashTransaction->expenseFromBenefit($benefit);
 
             return redirect()->route("admin_duka_detail", $id)->with("success", "Data Berhasil Diubah");
         } catch (QueryException $err) {

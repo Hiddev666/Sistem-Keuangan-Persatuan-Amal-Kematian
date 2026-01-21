@@ -39,7 +39,9 @@ class MemberController extends Controller
 
     public function riwayat()
     {
+        $histories = CashTransaction::with(['donation', 'contribution'])->orderBy("created_at", "desc")->get();
         return view('member/riwayat/index', [
+            "histories" => $histories
         ]);
     }
 
