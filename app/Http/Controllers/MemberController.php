@@ -39,7 +39,21 @@ class MemberController extends Controller
 
     public function riwayat()
     {
-        $histories = CashTransaction::with(['donation', 'contribution'])->orderBy("created_at", "desc")->get();
+        $user_id = auth()->user()->id;
+
+        $histories = CashTransaction::with(['donation', 'contribution'])
+            ->where(function ($q) use ($user_id) {
+                $q->whereHas('donation', function ($dq) use ($user_id) {
+                    $dq->where('family_card_id', $user_id);
+                })
+                    ->orWhereHas('contribution', function ($cq) use ($user_id) {
+                        $cq->where('family_card_id', $user_id);
+                    });
+            })
+            ->where("type", "=", "income")
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('member/riwayat/index', [
             "histories" => $histories
         ]);

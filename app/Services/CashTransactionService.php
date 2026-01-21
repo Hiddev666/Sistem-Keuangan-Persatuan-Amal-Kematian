@@ -136,7 +136,7 @@ class CashTransactionService
             'amount'           => 100000,
             'transaction_date' => now(),
             'description'      => sprintf(
-                'Registration %s',
+                'Registrasi Keanggotaan %s',
                 $familyCard->id
             ),
         ]);
