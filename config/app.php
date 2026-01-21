@@ -27,6 +27,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'midtrans_snap_url' => env("MIDTRANS_SNAP_URL", 'https://app.sandbox.midtrans.com/snap/snap.js'),
 
     /*
     |--------------------------------------------------------------------------

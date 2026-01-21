@@ -41,13 +41,16 @@ class MemberController extends Controller
     {
         $user_id = auth()->user()->id;
 
-        $histories = CashTransaction::with(['donation', 'contribution'])
+        $histories = CashTransaction::with(['donation', 'contribution', 'family_card'])
             ->where(function ($q) use ($user_id) {
                 $q->whereHas('donation', function ($dq) use ($user_id) {
                     $dq->where('family_card_id', $user_id);
                 })
                     ->orWhereHas('contribution', function ($cq) use ($user_id) {
                         $cq->where('family_card_id', $user_id);
+                    })
+                    ->orWhereHas('family_card', function ($fq) use ($user_id) {
+                        $fq->where('id', $user_id);
                     });
             })
             ->where("type", "=", "income")

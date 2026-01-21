@@ -43,4 +43,8 @@ class CashTransaction extends Model
     public function contribution() {
         return $this->belongsTo(Contribution::class, "reference_id", "id");
     }
+
+    public function family_card() {
+        return $this->belongsTo(FamilyCard::class, "reference_id", "id");
+    }
 }
