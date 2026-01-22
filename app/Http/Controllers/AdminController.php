@@ -574,7 +574,7 @@ class AdminController extends Controller
 
             $death_event_id = $death_event::where("member_id", "=", $member)->first();
 
-            $family_cards = FamilyCard::with("head")->get();
+            $family_cards = FamilyCard::with("head")->where("head_member_id", "!=", "")->get();
 
             foreach ($family_cards as $family_card) {
                 if($family_card["id"] == $death_member->family_card_id) {
@@ -696,6 +696,7 @@ class AdminController extends Controller
     {
         try {
             $benefit = Benefit::where("death_event_id", "=", $id)->delete();
+            $contribution = Contribution::where("death_event_id", "=", $id)->delete();
             $deathEvent = DeathEvent::findOrFail($id)->delete();
             return redirect()->route("admin_duka")->with("success", "Data Berita Duka Berhasil Dihapus");
         } catch (QueryException $err) {
