@@ -135,38 +135,40 @@
                                             </p>
                                         </div>
                                     </td>
-                                    <td class="font-normal p-2 text-right font-medium">
-                                        <div class="flex items-center justify-end gap-1">
-                                            <a href="{{ route("admin_sumbangan_edit", $donation["id"]) }}">
-                                                <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200">
-                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                        class="w-4 h-4">
+                                    @if($donation->status != "paid")
+                                        <td class="font-normal p-2 text-right font-medium">
+                                            <div class="flex items-center justify-end gap-1">
+                                                <a href="{{ route("admin_sumbangan_edit", $donation["id"]) }}">
+                                                    <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200">
+                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-4 h-4">
+                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                                            </g>
+                                                            <g id="SVGRepo_iconCarrier">
+                                                                <path d="M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6"
+                                                                    stroke="#303030" stroke-width="1.5" stroke-linecap="round"
+                                                                    stroke-linejoin="round"></path>
+                                                            </g>
+                                                        </svg>
+                                                    </button>
+                                                </a>
+                                                <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200"
+                                                    onclick="showDeletePopup('{{ $donation['id'] }}', this, 'sumbangan/delete')">
+                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                                        </g>
+                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                         <g id="SVGRepo_iconCarrier">
-                                                            <path d="M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6"
-                                                                stroke="#303030" stroke-width="1.5" stroke-linecap="round"
+                                                            <path
+                                                                d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17"
+                                                                stroke="#303030" stroke-width="2" stroke-linecap="round"
                                                                 stroke-linejoin="round"></path>
                                                         </g>
                                                     </svg>
                                                 </button>
-                                            </a>
-                                            <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200"
-                                                onclick="showDeletePopup('{{ $donation['id'] }}', this, 'kas/delete')">
-                                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
-                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                    <g id="SVGRepo_iconCarrier">
-                                                        <path
-                                                            d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17"
-                                                            stroke="#303030" stroke-width="2" stroke-linecap="round"
-                                                            stroke-linejoin="round"></path>
-                                                    </g>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
+                                            </div>
+                                        </td>
+                                    @endif
                                 </tr>
                     @endforeach
                 </tbody>
@@ -217,13 +219,13 @@
                             data.forEach(member => {
                                 console.log(member)
                                 html += `
-                                                                        <tr class="border-b border-gray-200 transition-all ease-in-out">
-                                                                            <td class="font-normal p-2 text-left font-semibold">${member["member"]["id"]}</td>
-                                                                            <td class="font-normal p-2 text-left font-semibold">${member["member"]["name"]}</td>
-                                                                            <td class="font-normal p-2 text-left font-medium">${rupiah(member["amount"])}</td>
-                                                                            <td class="font-normal p-2 text-center font-medium align-middle">
-                                                                                <div class="flex items-center gap-1 justify-center">
-                                                                                    <div class="w-3 h-3 rounded-full ${member["status"] === "failed" || member["status"] === "expired"
+                                                                            <tr class="border-b border-gray-200 transition-all ease-in-out">
+                                                                                <td class="font-normal p-2 text-left font-semibold">${member["member"]["id"]}</td>
+                                                                                <td class="font-normal p-2 text-left font-semibold">${member["member"]["name"]}</td>
+                                                                                <td class="font-normal p-2 text-left font-medium">${rupiah(member["amount"])}</td>
+                                                                                <td class="font-normal p-2 text-center font-medium align-middle">
+                                                                                    <div class="flex items-center gap-1 justify-center">
+                                                                                        <div class="w-3 h-3 rounded-full ${member["status"] === "failed" || member["status"] === "expired"
                                         ? "bg-red-800"
                                         : member["status"] === "pending"
                                             ? "bg-orange-500"
@@ -231,48 +233,48 @@
                                                 ? "bg-green-800"
                                                 : ""
                                     }
-                                    ">
+                                        ">
+                                                                                        </div>
+                                                                                        <p class="p-0 m-0">
+                                                                                            ${member["status"].charAt(0).toUpperCase() + member["status"].slice(1)}
+                                                                                        </p>
                                                                                     </div>
-                                                                                    <p class="p-0 m-0">
-                                                                                        ${member["status"].charAt(0).toUpperCase() + member["status"].slice(1)}
-                                                                                    </p>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td class="font-normal p-2 text-center font-semibold">${member["period"]}</td>
-                                                                        <td class="font-normal p-2 text-right font-medium">
-                                                        <div class="flex items-center justify-end gap-1">
-                                                            <a href="kas/edit/${member["id"]}">
-                                                                <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200">
-                                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                                        class="w-4 h-4">
+                                                                                </td>
+                                                                                <td class="font-normal p-2 text-center font-semibold">${member["period"]}</td>
+                                                                            <td class="font-normal p-2 text-right font-medium">
+                                                            <div class="flex items-center justify-end gap-1">
+                                                                <a href="kas/edit/${member["id"]}">
+                                                                    <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200">
+                                                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-4 h-4">
+                                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                                                                            </g>
+                                                                            <g id="SVGRepo_iconCarrier">
+                                                                                <path d="M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6"
+                                                                                    stroke="#303030" stroke-width="1.5" stroke-linecap="round"
+                                                                                    stroke-linejoin="round"></path>
+                                                                            </g>
+                                                                        </svg>
+                                                                    </button>
+                                                                </a>
+                                                                <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200"
+                                                                    onclick="showDeletePopup('${member["id"]}', this, 'kas/delete')">
+                                                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                                                        </g>
+                                                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                                         <g id="SVGRepo_iconCarrier">
-                                                                            <path d="M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6"
-                                                                                stroke="#303030" stroke-width="1.5" stroke-linecap="round"
+                                                                            <path
+                                                                                d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17"
+                                                                                stroke="#303030" stroke-width="2" stroke-linecap="round"
                                                                                 stroke-linejoin="round"></path>
                                                                         </g>
                                                                     </svg>
                                                                 </button>
-                                                            </a>
-                                                            <button class="p-2 border border-gray-200 rounded-md bg-white hover:bg-gray-200"
-                                                                onclick="showDeletePopup('${member["id"]}', this, 'kas/delete')">
-                                                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
-                                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                                    <g id="SVGRepo_iconCarrier">
-                                                                        <path
-                                                                            d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6M14 10V17M10 10V17"
-                                                                            stroke="#303030" stroke-width="2" stroke-linecap="round"
-                                                                            stroke-linejoin="round"></path>
-                                                                    </g>
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                                            </tr>
-                                                                        `;
+                                                            </div>
+                                                        </td>
+                                                                                </tr>
+                                                                            `;
                             });
                         }
 

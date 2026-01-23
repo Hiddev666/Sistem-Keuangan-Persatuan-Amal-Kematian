@@ -28,10 +28,10 @@
                                     class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md">
                             </div>
                             <div id="input-anggota-kas">
-                                <label for="members" class="text-gray-600 text-sm">Anggota</label>
+                                <label for="members" class="text-gray-600 text-sm">Kartu Keluarga</label>
                                 <div class="text-sm w-full relative">
                                     <div class="flex items-center gap-2">
-                                        <input type="text" id="search" name="search" value="{{ $donation->member->name ?? $donation->donor_name }}"
+                                        <input type="text" id="search" name="search" value="{{ $donation->family_card_id == null ? $donation->donor_name : $donation->family_card_id . " - " . $donation->family_card->head->name }}"
                                             class="px-3 py-2 text-sm w-full border border-gray-300 rounded-md" readonly>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <div id="input-anggota-kas">
-                                <label for="members" class="text-gray-600 text-sm">Pilih Anggota</label>
+                                <label for="members" class="text-gray-600 text-sm">Pilih Kartu Keluarga / Tulis Nama Donatur</label>
                                 <div class="text-sm w-full relative">
                                     <div class="flex items-center gap-2">
                                         <input type="text" id="search" name="search"

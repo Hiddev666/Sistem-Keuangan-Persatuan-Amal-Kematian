@@ -736,7 +736,7 @@ class AdminController extends Controller
                 ]);
             } else {
                 $member = Donation::create([
-                    'member_id' => $members["id"],
+                    'family_card_id' => $members["id"],
                     'amount' => $amount,
                     'status' => "pending",
                 ]);
@@ -756,10 +756,7 @@ class AdminController extends Controller
 
     public function editSumbangan($id)
     {
-        $donation = Donation::with('member')
-            ->orderBy('status')
-            ->orderBy('created_at', 'desc')
-            ->find($id);
+        $donation = Donation::with('family_card')->orderBy('status')->orderBy('created_at', 'desc')->find($id);
         return view('admin/sumbangan/add', [
             "donation" => $donation
         ]);
@@ -786,6 +783,15 @@ class AdminController extends Controller
                 ->withErrors([
                     'error' => $err->getMessage()
                 ]);
+        }
+    }
+
+    public function deleteSumbangan($id)
+    {
+        try {
+            $donation = Donation::findOrFail($id)->delete();
+            return redirect()->route("admin_sumbangan")->with("success", "Data Sumbangan Berhasil Dihapus");
+        } catch (QueryException $err) {
         }
     }
 }
